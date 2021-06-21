@@ -33,10 +33,11 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        python trackmytime/manage.py test
+        cd trackmytime
+        python manage.py test
     - name: List directory
       run: |
-        ls
+        ls test-results
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1
       if: always()
