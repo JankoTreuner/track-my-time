@@ -35,11 +35,8 @@ jobs:
       run: |
         cd trackmytime
         python manage.py test
-    - name: List directory
-      run: |
-        ls test-results
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1
       if: always()
       with:
-        files: test-results/*.xml
+        files: trackmytime/test-results/*.xml
