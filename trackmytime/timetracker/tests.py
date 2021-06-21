@@ -1,3 +1,11 @@
 from django.test import TestCase
 
-# Create your tests here.
+from .models import TimeEntry
+
+class TimeEntryTestCase(TestCase):
+    def setUp(self):
+        TimeEntry.objects.create()
+
+    def test_timeentry_exists(self):
+        entry = TimeEntry.objects.all()
+        self.assertEqual(1, entry.count())
