@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 import datetime
 
-# Create your models here.
+
 class TimeEntry(models.Model):
     start = models.DateTimeField(default=datetime.datetime.now)
     end = models.DateTimeField(null=True)

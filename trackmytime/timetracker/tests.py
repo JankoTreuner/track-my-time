@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from .models import TimeEntry
 
+
 class TimeEntryTestCase(TestCase):
     def setUp(self):
         TimeEntry.objects.create()
@@ -12,4 +13,4 @@ class TimeEntryTestCase(TestCase):
 
     def test_timeentry_active(self):
         entry = TimeEntry.objects.first()
-        self.assertEqual(True, entry.is_active) 
+        self.assertEqual(True, entry.is_active)
