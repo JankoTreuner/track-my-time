@@ -1,0 +1,10 @@
+<html>
+    <head>
+        <title>Overview</title>
+    </head>
+    <body>
+        {% for entry in entries %}
+        <p>{{ entry.start__date }} - Count: {{entry.count}} - {{entry.duration}}</p>
+        {% endfor %}
+    </body>
+</html>
