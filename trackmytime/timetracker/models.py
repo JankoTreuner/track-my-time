@@ -2,10 +2,14 @@ from django.db import models
 from django.db.models.enums import IntegerChoices
 from django.utils import timezone
 import datetime
+import calendar
 
 
 class Customer(models.Model):
     name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
 
 
 class WorkDay(models.Model):
@@ -22,6 +26,9 @@ class WorkDay(models.Model):
     day = models.IntegerField(choices=WorkDays.choices)
     customer = models.ForeignKey(Customer, null=False, on_delete=models.CASCADE, related_name='workdays')
     workinghours = models.DurationField(null=True)
+
+    def __str__(self):
+        return "%s (%s)" % (self.customer, calendar.day_name[self.day])
 
     class Meta:
         unique_together = ["day", "customer"]
@@ -48,3 +55,6 @@ class TimeEntry(models.Model):
             end = self.end
 
         return end - self.start
+
+    def __str__(self):
+        return "%s (%s) - %s" % (self.date, self.id, self.customer)
