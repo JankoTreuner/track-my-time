@@ -33,7 +33,7 @@ class Customer(models.Model):
         days_this_week = get_week(datetime.date.today())
         workedhours = datetime.timedelta(0)
         for day in days_this_week:
-            timeentries = TimeEntry.objects.filter(date=day)
+            timeentries = TimeEntry.objects.filter(date=day, customer=self)
             for timeentry in timeentries:
                 workedhours = workedhours + timeentry.duration
         return workedhours
