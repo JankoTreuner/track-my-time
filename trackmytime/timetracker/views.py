@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 
+import readabledelta
 import datetime
 
 
-from .models import TimeEntry
+from .models import TimeEntry, WorkDay
 
 
 def index(request):
@@ -15,14 +16,22 @@ def index(request):
 
 
 def overview(request):
-    grouped_entries = TimeEntry.objects.all().values('start__date').annotate(count=Sum(1))
+    grouped_entries = TimeEntry.objects.all().values('start__date', 'customer__name').annotate(count=Sum(1))
 
     for entry in grouped_entries:
         duration_total = datetime.timedelta()
-        entries_of_day = TimeEntry.objects.filter(start__date=entry['start__date'])
+        current_date = entry['start__date']
+        entries_of_day = TimeEntry.objects.filter(start__date=current_date)
         for entry_of_day in entries_of_day:
             duration_total = duration_total + entry_of_day.duration
         entry['duration'] = duration_total
+        try:
+            entry['workinghours'] = WorkDay.objects.get(customer__name=entry['customer__name'],
+                                                        day=current_date.weekday()).workinghours
+        except WorkDay.DoesNotExist:
+            entry['workinghours'] = datetime.timedelta(0)
+
+        entry['timediff'] = readabledelta.readabledelta(entry['duration'] - entry['workinghours'])
 
     return render(request, 'timetracker/overview.html', {'entries': grouped_entries})
 

@@ -4,7 +4,7 @@
     </head>
     <body>
         {% for entry in entries %}
-        <p>{{ entry.start__date }} - Count: {{entry.count}} - {{entry.duration}}</p>
+        <p>{{ entry.start__date }} - Count: {{entry.count}} - {{entry.customer__name}} - {{entry.duration}} / {{ entry.workinghours }} / {{ entry.timediff }}</p>
         {% endfor %}
     </body>
 </html>
