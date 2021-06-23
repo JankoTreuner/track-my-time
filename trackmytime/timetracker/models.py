@@ -5,8 +5,38 @@ import datetime
 import calendar
 
 
+def get_week(date):
+    """Return the full week (Sunday first) of the week containing the given date.
+    'date' may be a datetime or date instance (the same type is returned).
+    """
+    monday = date - datetime.timedelta(days=date.weekday())
+    date = monday
+    for n in range(0, 6):
+        yield date
+        date += datetime.timedelta(days=1)
+
+
 class Customer(models.Model):
     name = models.CharField(max_length=255)
+
+    @property
+    def workinghours(self):
+        workdays = self.workdays.all()
+        workinghours = datetime.timedelta(0)
+        for workday in workdays:
+            workinghours = workinghours + workday.workinghours
+
+        return workinghours
+
+    @property
+    def workedhours(self):
+        days_this_week = get_week(datetime.date.today())
+        workedhours = datetime.timedelta(0)
+        for day in days_this_week:
+            timeentries = TimeEntry.objects.filter(date=day)
+            for timeentry in timeentries:
+                workedhours = workedhours + timeentry.duration
+        return workedhours
 
     def __str__(self):
         return self.name

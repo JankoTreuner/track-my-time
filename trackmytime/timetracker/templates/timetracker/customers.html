@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>Customer</title>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Hours per Week</th>
+                <th>Worked so far this week</th>
+            </tr>
+            {% for customer in customers %}
+            <tr>
+                <td>
+                    {{ customer.name }}
+                </td>
+                <td>
+                    {{ customer.workinghours }}
+                </td>
+                <td>
+                    {{ customer.workedhours }}
+                </td>
+
+            </tr>
+            {% endfor %}
+        </table>
+
+    </body>
+</html>

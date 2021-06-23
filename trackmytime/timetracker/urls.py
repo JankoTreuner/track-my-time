@@ -7,4 +7,5 @@ urlpatterns = [
     path('add-entry', views.add, name='add'),
     path('stop-entry/<entry_id>', views.stop, name='stop'),
     path('overview', views.overview, name='overview'),
+    path('customers', views.customers, name='customers')
 ]

@@ -5,7 +5,7 @@ import readabledelta
 import datetime
 
 
-from .models import TimeEntry, WorkDay
+from .models import Customer, TimeEntry, WorkDay
 
 
 def index(request):
@@ -49,3 +49,9 @@ def stop(request, entry_id):
     entry.save()
 
     return redirect('index')
+
+
+def customers(request):
+    customers = Customer.objects.all()
+
+    return render(request, 'timetracker/customers.html',  {'customers': customers})
