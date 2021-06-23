@@ -43,6 +43,8 @@ class TimeEntry(models.Model):
     customer = models.ForeignKey(Customer, default=None, null=True, on_delete=models.CASCADE,
                                  related_name='time_entries')
 
+    booked = models.BooleanField(default=False, null=False)
+
     @property
     def is_active(self):
         return self.end is None
@@ -57,4 +59,4 @@ class TimeEntry(models.Model):
         return end - self.start
 
     def __str__(self):
-        return "%s (%s) - %s" % (self.date, self.id, self.customer)
+        return "%s (%s) - %s (Booked: %s)" % (self.date, self.id, self.customer, self.booked)
