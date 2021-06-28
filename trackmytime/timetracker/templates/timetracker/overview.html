@@ -1,10 +1,10 @@
-<html>
-    <head>
-        <title>Overview</title>
-    </head>
-    <body>
-        {% for entry in entries %}
-        <p>{{ entry.start__date }} - Count: {{entry.count}} - {{entry.client__name}} - {{entry.duration}} / {{ entry.workinghours }} / {{ entry.timediff }}</p>
-        {% endfor %}
-    </body>
-</html>
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Overview" %}{% endblock %}
+
+{% block body %}
+{% for entry in entries %}
+    <p>{{ entry.start__date }} - Count: {{entry.count}} - {{entry.client__name}} - {{entry.duration}} / {{ entry.workinghours }} / {{ entry.timediff }}</p>
+    {% endfor %}
+{% endblock %} 
