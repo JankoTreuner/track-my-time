@@ -16,13 +16,15 @@ def index(request):
 
 
 def overview(request):
-    grouped_entries = TimeEntry.objects.filter(booked=False).values('start__date', 'client__name').annotate(
+    grouped_entries = TimeEntry.objects.filter(booked=False, client__isnull=False,
+                                               client__has_booking=True).values('start__date', 'client__name').annotate(
         count=Sum(1))
 
     for entry in grouped_entries:
         duration_total = datetime.timedelta()
         current_date = entry['start__date']
-        entries_of_day = TimeEntry.objects.filter(booked=False, start__date=current_date)
+        entries_of_day = TimeEntry.objects.filter(booked=False, client__isnull=False, client__has_booking=True,
+                                                  start__date=current_date)
         for entry_of_day in entries_of_day:
             duration_total = duration_total + entry_of_day.duration
         entry['duration'] = duration_total

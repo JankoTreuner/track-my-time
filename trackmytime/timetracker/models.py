@@ -18,6 +18,7 @@ def get_week(date):
 
 class Client(models.Model):
     name = models.CharField(max_length=255)
+    has_booking = models.BooleanField(default=True)
 
     @property
     def workinghours(self):
@@ -71,7 +72,7 @@ class TimeEntry(models.Model):
     date = models.DateField(default=datetime.date.today)
 
     client = models.ForeignKey(Client, default=None, null=True, on_delete=models.CASCADE,
-                                 related_name='time_entries')
+                               related_name='time_entries')
 
     booked = models.BooleanField(default=False, null=False)
 
@@ -88,5 +89,12 @@ class TimeEntry(models.Model):
 
         return end - self.start
 
+    @property
+    def is_booked(self):
+        if self.client and self.client.has_booking:
+            return self.booked
+        else:
+            return True
+
     def __str__(self):
-        return "%s (%s) - %s (Booked: %s)" % (self.date, self.id, self.client, self.booked)
+        return "%s (%s) - %s (Booked: %s, Active %s)" % (self.date, self.id, self.client, self.booked, self.is_active)
