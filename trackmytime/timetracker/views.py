@@ -5,7 +5,7 @@ import readabledelta
 import datetime
 
 
-from .models import Customer, TimeEntry, WorkDay
+from .models import Client, TimeEntry, WorkDay
 
 
 def index(request):
@@ -16,7 +16,7 @@ def index(request):
 
 
 def overview(request):
-    grouped_entries = TimeEntry.objects.filter(booked=False).values('start__date', 'customer__name').annotate(
+    grouped_entries = TimeEntry.objects.filter(booked=False).values('start__date', 'client__name').annotate(
         count=Sum(1))
 
     for entry in grouped_entries:
@@ -27,7 +27,7 @@ def overview(request):
             duration_total = duration_total + entry_of_day.duration
         entry['duration'] = duration_total
         try:
-            entry['workinghours'] = WorkDay.objects.get(customer__name=entry['customer__name'],
+            entry['workinghours'] = WorkDay.objects.get(client__name=entry['client__name'],
                                                         day=current_date.weekday()).workinghours
         except WorkDay.DoesNotExist:
             entry['workinghours'] = datetime.timedelta(0)
@@ -51,7 +51,7 @@ def stop(request, entry_id):
     return redirect('index')
 
 
-def customers(request):
-    customers = Customer.objects.all()
+def clients(request):
+    clients = Client.objects.all()
 
-    return render(request, 'timetracker/customers.html',  {'customers': customers})
+    return render(request, 'timetracker/clients.html',  {'clients': clients})

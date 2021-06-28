@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Customer</title>
+        <title>Clients</title>
     </head>
     <body>
         <table>
@@ -9,16 +9,16 @@
                 <th>Hours per Week</th>
                 <th>Worked so far this week</th>
             </tr>
-            {% for customer in customers %}
+            {% for client in clients %}
             <tr>
                 <td>
-                    {{ customer.name }}
+                    {{ client.name }}
                 </td>
                 <td>
-                    {{ customer.workinghours }}
+                    {{ client.workinghours }}
                 </td>
                 <td>
-                    {{ customer.workedhours }}
+                    {{ client.workedhours }}
                 </td>
 
             </tr>

@@ -16,7 +16,7 @@ def get_week(date):
         date += datetime.timedelta(days=1)
 
 
-class Customer(models.Model):
+class Client(models.Model):
     name = models.CharField(max_length=255)
 
     @property
@@ -33,7 +33,7 @@ class Customer(models.Model):
         days_this_week = get_week(datetime.date.today())
         workedhours = datetime.timedelta(0)
         for day in days_this_week:
-            timeentries = TimeEntry.objects.filter(date=day, customer=self)
+            timeentries = TimeEntry.objects.filter(date=day, client=self)
             for timeentry in timeentries:
                 workedhours = workedhours + timeentry.duration
         return workedhours
@@ -54,14 +54,14 @@ class WorkDay(models.Model):
         SUNDAY = 6
 
     day = models.IntegerField(choices=WorkDays.choices)
-    customer = models.ForeignKey(Customer, null=False, on_delete=models.CASCADE, related_name='workdays')
+    client = models.ForeignKey(Client, null=False, on_delete=models.CASCADE, related_name='workdays')
     workinghours = models.DurationField(null=True)
 
     def __str__(self):
-        return "%s (%s)" % (self.customer, calendar.day_name[self.day])
+        return "%s (%s)" % (self.client, calendar.day_name[self.day])
 
     class Meta:
-        unique_together = ["day", "customer"]
+        unique_together = ["day", "client"]
 
 
 class TimeEntry(models.Model):
@@ -70,7 +70,7 @@ class TimeEntry(models.Model):
 
     date = models.DateField(default=datetime.date.today)
 
-    customer = models.ForeignKey(Customer, default=None, null=True, on_delete=models.CASCADE,
+    client = models.ForeignKey(Client, default=None, null=True, on_delete=models.CASCADE,
                                  related_name='time_entries')
 
     booked = models.BooleanField(default=False, null=False)
@@ -89,4 +89,4 @@ class TimeEntry(models.Model):
         return end - self.start
 
     def __str__(self):
-        return "%s (%s) - %s (Booked: %s)" % (self.date, self.id, self.customer, self.booked)
+        return "%s (%s) - %s (Booked: %s)" % (self.date, self.id, self.client, self.booked)
