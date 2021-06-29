@@ -1,12 +1,42 @@
 {% load i18n %}
+{% load icons %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
 
 <html>
     <head>
         <title>{% block title %}{% translate "Track-My-Time" %}{% endblock %}</title>
+        <!-- Font Awesome CSS -->
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+        crossorigin="anonymous">
     </head>
     <body>
+        <div class="bg-light">
+        <div class="container">
+        {% block navbar %}
+            {% include "components/navbar.html"  %}
+        {% endblock %}
+    </div>
+</div>
+
+    <div class="container bg-light mt-2 p-4">
+        <h2>{% block headline %}Unset{% endblock %}</h2>
+    </div>
+
+  <div class="container">
     {% block body %}
 
     {% endblock %}
+</div>
     </body>
 </html>

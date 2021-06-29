@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'bootstrap4',
+    'django_icons',
+
     'timetracker',
 ]
 
@@ -127,3 +131,32 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
 TEST_OUTPUT_DIR = './test-results/'
+
+# Settings for django-icons
+DJANGO_ICONS = {
+
+    'DEFAULTS': {
+        'renderer': 'fontawesome4',
+    },
+
+    'RENDERERS': {
+        'fontawesome4': 'FontAwesome4Renderer',
+        'bootstrap3': 'Bootstrap3Renderer',
+    },
+
+    'ICONS': {
+
+        'delete': 'trash',
+        'edit': {
+            'name': 'pencil',
+            'title': 'Edit',
+        },
+        'feather': {
+            'renderer': 'tests.app.renderers.CustomSvgRenderer',
+        },
+        'paperplane': {
+            'renderer': 'tests.app.renderers.CustomSvgRenderer',
+        }
+    },
+
+}

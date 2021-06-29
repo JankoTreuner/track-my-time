@@ -1,29 +1,34 @@
-<html>
-    <head>
-        <title>Clients</title>
-    </head>
-    <body>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>Hours per Week</th>
-                <th>Worked so far this week</th>
-            </tr>
-            {% for client in clients %}
-            <tr>
-                <td>
-                    {{ client.name }}
-                </td>
-                <td>
-                    {{ client.workinghours }}
-                </td>
-                <td>
-                    {{ client.workedhours }}
-                </td>
+{% extends "base.html" %}
+{% load i18n %}
 
-            </tr>
-            {% endfor %}
-        </table>
+{% block title %}{{ block.super }} - {% translate "Clients" %}{% endblock %}
 
-    </body>
-</html>
+
+{% block headline %}{% translate "Clients" %}{% endblock %}
+
+
+
+{% block body %}
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Hours per Week</th>
+        <th>Worked so far this week</th>
+    </tr>
+    {% for client in clients %}
+    <tr>
+        <td>
+            {{ client.name }}
+        </td>
+        <td>
+            {{ client.workinghours }}
+        </td>
+        <td>
+            {{ client.workedhours }}
+        </td>
+
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}}

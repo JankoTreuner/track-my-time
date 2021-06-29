@@ -1,12 +1,17 @@
-<html>
-    <head>
-        <title>Timetracker</title>
-    </head>
-    <body>
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ block.super }} - {% translate "Home" %}{% endblock %}
+
+
+{% block headline %}{% translate "Home" %}{% endblock %}
+
+
+
+{% block body %}
         <a href="{% url 'add' %}">Add entry</a>
 
         {% for entry in entries %}
         <p>{{entry.start}} - {{entry.end}} ({{entry.duration}}){% if entry.is_active %}<a href="{% url 'stop' entry.id %}">Stop</a>{% endif %}</p>
         {% endfor %}
-    </body>
-</html>
+{% endblock %}}
