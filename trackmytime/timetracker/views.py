@@ -61,5 +61,13 @@ def clients(request):
 
 def unbooked(request):
     unbooked_entries = TimeEntry.objects.filter(booked=False, client__isnull=False, client__has_booking=True)
-    
+
     return render(request, 'timetracker/unbooked.html', {'unbooked_entries': unbooked_entries})
+
+
+def mark_as_booked(request, entry_id):
+    entry = TimeEntry.objects.get(pk=entry_id)
+    entry.booked = True
+    entry.save()
+
+    return redirect('unbooked')

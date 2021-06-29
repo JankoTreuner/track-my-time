@@ -14,10 +14,22 @@
         <thead>
             <tr>
                 <th>
-                    {% translate "Entry" %}
+                    {% translate "Wochentag" %}
+                </th>
+                <th>
+                    {% translate "Date" %}
+                </th>
+                <th>
+                    {% translate "Client" %}
                 </th>
                 <th>
                     {% translate "Duration" %}
+                </th>
+                <th>
+                    {% translate "Start" %}
+                </th>
+                <th>
+                    {% translate "End" %}
                 </th>
                 <th>
                     {% translate "Action" %}
@@ -28,13 +40,25 @@
 
     <tr>
         <td>
-        {{entry}}
+            {{entry.date|date:"l" }}
+            </td>
+        <td>
+        {{entry.date}}
         </td>
+        <td>
+            {{entry.client}}
+            </td>
         <td>
             {{entry.duration}}
         </td>
         <td>
-            <a href='#'>{% translate 'Mark as booked' %}</a>
+            {{entry.start}}
+            </td>
+            <td>
+                {{entry.end}}
+                </td>
+        <td>
+            <a href="{% url 'mark-as-booked' entry.id %}">{% translate 'Mark as booked' %}</a>
         </td>
     </tr>
 
