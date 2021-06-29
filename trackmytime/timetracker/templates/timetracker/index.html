@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load bootstrap %}
+{% load icons %}
 
 {% block title %}{{ block.super }} - {% translate "Home" %}{% endblock %}
 
@@ -66,8 +67,9 @@
                     {{entry.end}}
                     </td>
             <td>
-                    {% if entry.is_active %}
-                <a href="{% url 'stop' entry.id %}">{% translate 'Stop' %}</a>
+                <a href="#" data-toggle="modal" data-target="#exampleModal" data-entry="{{entry.id}}" data-info="{{entry}}" data-url="{% url 'delete' entry.id %}">{% icon 'delete' %}&nbsp;{%translate 'Delete' %}</a>
+                {% if entry.is_active %}
+                <a href="{% url 'stop' entry.id %}">{% icon 'stop' %}&nbsp;{% translate 'Stop' %}</a>
                 {% endif %}
             </td>
         </tr>
@@ -76,6 +78,40 @@
     </table>
     </div>
 
-        
+    <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Delete the entry?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button id="confirmbutton" type="button" class="btn btn-primary" onclick="javascript:location.href='#'">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-{% endblock %}}
+  <script>
+    $('#exampleModal').on('show.bs.modal', function (event) {
+var button = $(event.relatedTarget) // Button that triggered the modal
+var entry_id = button.data('entry') // Extract info from data-* attributes
+var entry = button.data('info') // Extract info from data-* attributes
+var entry_delete_url = button.data('url') // Extract info from data-* attributes
+// If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+// Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+var modal = $(this)
+modal.find('.modal-title').text('Delete ' + entry)
+modal.find("#confirmbutton").on('click', () => { location.href=entry_delete_url });
+
+})
+</script>
+
+{% endblock %}

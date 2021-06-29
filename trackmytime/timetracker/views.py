@@ -91,3 +91,10 @@ def mark_as_booked(request, entry_id):
     entry.save()
 
     return redirect('unbooked')
+
+
+def delete(request, entry_id):
+    entry = TimeEntry.objects.get(pk=entry_id)
+    entry.delete()
+
+    return redirect('index')
