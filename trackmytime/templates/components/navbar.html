@@ -15,6 +15,9 @@
           <li class="nav-item {% if  request.path == '/clients' %}active{% endif %}">
             <a class="nav-link" href="{% url 'clients' %}">Clients</a>
           </li>
+          <li class="nav-item {% if  request.path == '/unbooked' %}active{% endif %}">
+            <a class="nav-link" href="{% url 'unbooked' %}">Unbooked</a>
+          </li>
         </ul>
     
       </nav>

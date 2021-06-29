@@ -57,3 +57,9 @@ def clients(request):
     clients = Client.objects.all()
 
     return render(request, 'timetracker/clients.html',  {'clients': clients})
+
+
+def unbooked(request):
+    unbooked_entries = TimeEntry.objects.filter(booked=False, client__isnull=False, client__has_booking=True)
+    
+    return render(request, 'timetracker/unbooked.html', {'unbooked_entries': unbooked_entries})

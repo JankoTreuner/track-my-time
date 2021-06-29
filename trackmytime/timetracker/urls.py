@@ -7,5 +7,6 @@ urlpatterns = [
     path('add-entry', views.add, name='add'),
     path('stop-entry/<entry_id>', views.stop, name='stop'),
     path('overview', views.overview, name='overview'),
-    path('clients', views.clients, name='clients')
+    path('clients', views.clients, name='clients'),
+    path('unbooked', views.unbooked, name='unbooked')
 ]
