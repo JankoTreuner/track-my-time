@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db.models import Sum
+from .forms import AddEntryForm
 
 import readabledelta
 import datetime
@@ -11,8 +12,11 @@ from .models import Client, TimeEntry, WorkDay
 def index(request):
 
     entries = TimeEntry.objects.all().order_by('-start')
+    clients = Client.objects.all()
 
-    return render(request, "timetracker/index.html", {'entries': entries})
+    form = AddEntryForm()
+
+    return render(request, "timetracker/index.html", {'entries': entries, 'clients': clients, 'form': form})
 
 
 def overview(request):
@@ -40,7 +44,25 @@ def overview(request):
 
 
 def add(request):
-    TimeEntry.objects.create()
+
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+    
+        # create a form instance and populate it with data from the request:
+        form = AddEntryForm(request.POST)
+        
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            client_name = form.cleaned_data['client']
+            client = Client.objects.get(name=client_name)
+            TimeEntry.objects.create(client=client)
+
+            return redirect('index')
+
+            
 
     return redirect('index')
 

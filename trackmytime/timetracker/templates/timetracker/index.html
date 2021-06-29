@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load bootstrap %}
 
 {% block title %}{{ block.super }} - {% translate "Home" %}{% endblock %}
 
@@ -9,9 +10,72 @@
 
 
 {% block body %}
-        <a href="{% url 'add' %}">Add entry</a>
 
-        {% for entry in entries %}
-        <p>{{entry.start}} - {{entry.end}} ({{entry.duration}}){% if entry.is_active %}<a href="{% url 'stop' entry.id %}">Stop</a>{% endif %}</p>
-        {% endfor %}
+<form method='post' action="{% url 'add' %}" class="form-inline" >
+{% csrf_token %}
+{{form|bootstrap}}
+<button type="submit" class="btn btn-primary">{% translate "Add Entry" %}</button>
+
+</form>
+
+<div class="container">
+        <table  class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        {% translate "Wochentag" %}
+                    </th>
+                    <th>
+                        {% translate "Date" %}
+                    </th>
+                    <th>
+                        {% translate "Client" %}
+                    </th>
+                    <th>
+                        {% translate "Duration" %}
+                    </th>
+                    <th>
+                        {% translate "Start" %}
+                    </th>
+                    <th>
+                        {% translate "End" %}
+                    </th>
+                    <th>
+                        {% translate "Action" %}
+                    </th>
+                </tr>
+            </thead>
+    {% for entry in entries %}
+        <tr>
+            <td>
+                {{entry.date|date:"l" }}
+                </td>
+            <td>
+            {{entry.date}}
+            </td>
+            <td>
+                {{entry.client}}
+                </td>
+            <td>
+                {{entry.duration}}
+            </td>
+            <td>
+                {{entry.start}}
+                </td>
+                <td>
+                    {{entry.end}}
+                    </td>
+            <td>
+                    {% if entry.is_active %}
+                <a href="{% url 'stop' entry.id %}">{% translate 'Stop' %}</a>
+                {% endif %}
+            </td>
+        </tr>
+    
+    {% endfor %}
+    </table>
+    </div>
+
+        
+
 {% endblock %}}
