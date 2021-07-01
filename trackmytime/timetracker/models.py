@@ -8,7 +8,7 @@ import calendar
 
 
 class UserBasedModel(models.Model):
-    user = ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
 
     class Meta:
         abstract = True
