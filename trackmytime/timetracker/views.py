@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 from .forms import AddEntryForm
-
+from django.contrib.auth.decorators import login_required
 import readabledelta
 import datetime
 
@@ -9,6 +9,7 @@ import datetime
 from .models import Client, TimeEntry, WorkDay
 
 
+@login_required()
 def index(request):
 
     entries = TimeEntry.objects.all().order_by('-start')
@@ -19,6 +20,7 @@ def index(request):
     return render(request, "timetracker/index.html", {'entries': entries, 'clients': clients, 'form': form})
 
 
+@login_required()
 def overview(request):
     grouped_entries = TimeEntry.objects.filter(booked=False, client__isnull=False,
                                                client__has_booking=True).values('start__date', 'client__name').annotate(
@@ -43,6 +45,7 @@ def overview(request):
     return render(request, 'timetracker/overview.html', {'entries': grouped_entries})
 
 
+@login_required()
 def add(request):
 
     # if this is a POST request we need to process the form data
@@ -65,6 +68,7 @@ def add(request):
     return redirect('index')
 
 
+@login_required()
 def stop(request, entry_id):
     entry = TimeEntry.objects.get(pk=entry_id)
     entry.end = datetime.datetime.now()
@@ -73,18 +77,21 @@ def stop(request, entry_id):
     return redirect('index')
 
 
+@login_required()
 def clients(request):
     clients = Client.objects.all()
 
     return render(request, 'timetracker/clients.html',  {'clients': clients})
 
 
+@login_required()
 def unbooked(request):
     unbooked_entries = TimeEntry.objects.filter(booked=False, client__isnull=False, client__has_booking=True)
 
     return render(request, 'timetracker/unbooked.html', {'unbooked_entries': unbooked_entries})
 
 
+@login_required()
 def mark_as_booked(request, entry_id):
     entry = TimeEntry.objects.get(pk=entry_id)
     entry.booked = True
@@ -93,6 +100,7 @@ def mark_as_booked(request, entry_id):
     return redirect('unbooked')
 
 
+@login_required()
 def delete(request, entry_id):
     entry = TimeEntry.objects.get(pk=entry_id)
     entry.delete()
