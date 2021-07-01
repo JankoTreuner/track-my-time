@@ -1,8 +1,17 @@
 from django.db import models
 from django.db.models.enums import IntegerChoices
+from django.db.models.fields.related import ForeignKey
 from django.utils import timezone
+from django.conf import settings
 import datetime
 import calendar
+
+
+class UserBasedModel(models.Model):
+    user = ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    class Meta:
+        abstract = True
 
 
 def get_week(date):
@@ -16,7 +25,7 @@ def get_week(date):
         date += datetime.timedelta(days=1)
 
 
-class Client(models.Model):
+class Client(UserBasedModel):
     name = models.CharField(max_length=255)
     has_booking = models.BooleanField(default=True)
 
@@ -43,7 +52,7 @@ class Client(models.Model):
         return self.name
 
 
-class WorkDay(models.Model):
+class WorkDay(UserBasedModel):
 
     class WorkDays(IntegerChoices):
         MONDAY = 0
@@ -65,7 +74,7 @@ class WorkDay(models.Model):
         unique_together = ["day", "client"]
 
 
-class TimeEntry(models.Model):
+class TimeEntry(UserBasedModel):
     start = models.DateTimeField(default=datetime.datetime.now)
     end = models.DateTimeField(null=True, blank=True)
 
