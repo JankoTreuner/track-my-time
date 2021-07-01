@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ block.super }} - {% translate "Unbooked" %}{% endblock %}
+
+
+{% block headline %}{% translate "Unbooked" %}{% endblock %}
+
+
+
+{% block body %}
+<div class="container">
+    <table  class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    {% translate "Wochentag" %}
+                </th>
+                <th>
+                    {% translate "Date" %}
+                </th>
+                <th>
+                    {% translate "Client" %}
+                </th>
+                <th>
+                    {% translate "Duration" %}
+                </th>
+                <th>
+                    {% translate "Count" %}
+                </th>
+                <th>
+                    {% translate "Action" %}
+                </th>
+            </tr>
+        </thead>
+{% for entry in unbooked_entries %}
+
+    <tr>
+        <td>
+            {{entry.date|date:"l" }}
+            </td>
+        <td>
+        {{entry.date}}
+        </td>
+        <td>
+            {{entry.client__name}}
+            </td>
+        <td>
+            {{entry.duration}}
+        </td>
+        <td>
+            {{entry.datecount}}
+        </td>
+        <td>
+            <a href="{% url 'mark-as-booked-by-date' entry.date entry.client__name %}">{% translate 'Mark as booked' %}</a>
+        </td>
+    </tr>
+
+{% endfor %}
+</table>
+</div>
+{% endblock %}}

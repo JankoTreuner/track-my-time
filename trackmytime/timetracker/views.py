@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from .forms import AddEntryForm
 from django.contrib.auth.decorators import login_required
 import readabledelta
@@ -91,6 +91,21 @@ def unbooked(request):
     return render(request, 'timetracker/unbooked.html', {'unbooked_entries': unbooked_entries})
 
 
+def unbooked_by_date(request):
+    unbooked_entries = TimeEntry.objects.filter(booked=False, client__isnull=False, client__has_booking=True).values(
+                                                'date', 'client__name').annotate(datecount=Count('date'))
+
+    for entry in unbooked_entries:
+        duration = datetime.timedelta()
+        entries = TimeEntry.objects.filter(booked=False, client__isnull=False, client__has_booking=True,
+                                           date=entry['date'], client__name=entry['client__name'])
+        for e in entries:
+            duration = duration + e.duration
+        entry['duration'] = duration
+
+    return render(request, 'timetracker/unbooked_by_date.html', {'unbooked_entries': unbooked_entries})
+
+
 @login_required()
 def mark_as_booked(request, entry_id):
     entry = TimeEntry.objects.get(pk=entry_id)
@@ -98,6 +113,16 @@ def mark_as_booked(request, entry_id):
     entry.save()
 
     return redirect('unbooked')
+
+
+@login_required()
+def mark_as_booked_by_date(request, date, clientname):
+    entries = TimeEntry.objects.filter(date=date, client__name=clientname, booked=False)
+    for entry in entries:
+        print(entry)
+        entry.booked = True
+        entry.save()
+    return redirect('unbooked-by-date')
 
 
 @login_required()
