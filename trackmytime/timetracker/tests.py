@@ -1,10 +1,11 @@
 from django.test import TestCase
-
+from django.contrib.auth.models import User
 from .models import Client, TimeEntry
 
 
 class TimeEntryTestCase(TestCase):
     def setUp(self):
+        User.objects.get_or_create(name="testuser")
         TimeEntry.objects.create()
 
     def test_timeentry_exists(self):
@@ -38,6 +39,7 @@ class TimeEntryTestCase(TestCase):
 
 class ClientTestCase(TestCase):
     def setUp(self):
+        User.objects.get_or_create(name="testuser")
         Client.objects.create(name="DefaultTestClient")
 
     def test_client_exists(self):
