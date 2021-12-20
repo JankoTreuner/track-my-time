@@ -15,9 +15,6 @@
           <li class="nav-item {% if  request.path == '/clients' %}active{% endif %}">
             <a class="nav-link" href="{% url 'clients' %}">Clients</a>
           </li>
-          <li class="nav-item {% if  request.path == '/unbooked' %}active{% endif %}">
-            <a class="nav-link" href="{% url 'unbooked' %}">Unbooked</a>
-          </li>
           <li class="nav-item {% if  request.path == '/unbooked-by-date' %}active{% endif %}">
             <a class="nav-link" href="{% url 'unbooked-by-date' %}">Unbooked-Grouped</a>
           </li>
