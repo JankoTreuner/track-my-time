@@ -32,9 +32,24 @@ class Client(UserBasedModel):
     @property
     def workinghours(self):
         workdays = self.workdays.all()
+        #print(workdays)
+        today = datetime.date.today()
+        dates = [today + datetime.timedelta(days=i) for i in range(0-today.weekday(), 7-today.weekday())]
+
         workinghours = datetime.timedelta(0)
-        for workday in workdays:
-            workinghours = workinghours + workday.workinghours
+        for date in dates:
+            #print(date)
+            try:
+                workday = workdays.get(day=date.weekday())
+                holiay = Holiday.objects.filter(start__lte=date, end__gte=date)
+                #print(holiay.count() > 0)
+                is_holiday = holiay.count() > 0
+            except:
+                workday = None
+                pass
+            #print("%s, %s" % (workday, date.weekday()))
+            if(workday and not is_holiday):
+                workinghours = workinghours + workday.workinghours
 
         return workinghours
 
@@ -51,6 +66,11 @@ class Client(UserBasedModel):
     def __str__(self):
         return self.name
 
+class Holiday(UserBasedModel):
+    start = models.DateField()
+    end = models.DateField()
+    client = models.ManyToManyField(Client, related_name='holiday')
+    
 
 class WorkDay(UserBasedModel):
 
