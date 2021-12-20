@@ -70,9 +70,41 @@ class Client(UserBasedModel):
 
         return worked
 
+    def daterange(self, start_date, end_date):
+        for n in range(int((end_date - start_date).days)):
+            yield start_date + datetime.timedelta(n)
+
     def workinghours_year(self, year=datetime.date.today().year):
-        
-        return datetime.timedelta(hours=10)
+
+        if self.created_at is None:
+            start = datetime.date(year=year, month=1, day=1)
+        else:
+            if year == self.created_at.year:
+                
+                start = datetime.date(year=self.created_at.year, month=self.created_at.month, day=self.created_at.day)
+            else:
+                start = datetime.date(year=year, month=1, day=1)
+
+        if year is datetime.date.today().year:
+            end = datetime.date.today()
+        else:
+            end = datetime.date(year=year, month=12, day=31)
+
+
+        workdays = self.workdays.all()
+        expected = datetime.timedelta(0)
+        for single_date in self.daterange(start, end):
+            try:
+                workday = workdays.get(day=single_date.weekday())
+                holiay = Holiday.objects.filter(start__lte=single_date, end__gte=single_date)
+                is_holiday = holiay.count() > 0
+            except WorkDay.DoesNotExist:
+                workday = None
+                pass
+            if(workday and not is_holiday):
+                expected = expected + workday.workinghours
+
+        return expected
 
 
     @property
