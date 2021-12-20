@@ -28,6 +28,7 @@ def get_week(date):
 class Client(UserBasedModel):
     name = models.CharField(max_length=255)
     has_booking = models.BooleanField(default=True)
+    created_at = models.DateTimeField(null=True)
 
     @property
     def workinghours(self):
