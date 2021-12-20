@@ -51,6 +51,31 @@ class Client(UserBasedModel):
         return workinghours
 
     @property
+    def years(self):
+        if self.created_at is None:
+            # Current year
+            return [datetime.date.today().year]
+        else:
+            # Any year since created
+            start_year = self.created_at.year
+            current_year = datetime.date.today().year
+            return [current_year - i for i in range(0, current_year+1-start_year)]
+
+    def workedhours_year(self, year=datetime.date.today().year):
+        tes = TimeEntry.objects.filter(client=self, date__year=year)
+
+        worked = datetime.timedelta(0)
+        for te in tes:
+            worked = worked + te.duration
+
+        return worked
+
+    def workinghours_year(self, year=datetime.date.today().year):
+        
+        return datetime.timedelta(hours=10)
+
+
+    @property
     def workedhours(self):
         days_this_week = get_week(datetime.date.today())
         workedhours = datetime.timedelta(0)

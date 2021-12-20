@@ -6,7 +6,29 @@
 {% block headline %}{% translate "Overview" %}{% endblock %}
 
 {% block body %}
+
 {% for entry in entries %}
-    <p>{{ entry.start__date }} - Count: {{entry.count}} - {{entry.client__name}} - {{entry.duration}} / {{ entry.workinghours }} / {{ entry.timediff }}</p>
+<h5>{{entry.client}}</h5>
+<div class="container">
+    <table class="table table-striped">
+    
+        <tr>
+        <th>year</th>
+        <th>hours worked</th>
+        <th>hours expected</th>
+        <th>difference</th>
+    </tr>
+    {% for year in entry.years %} 
+    <tr>
+        <td>{{ year.year }}</td>
+        <td>{{ year.hours }} </td>
+        <td>{{ year.expected }}</td>
+        <td>{{ year.diff }}</td>
+    </tr>
     {% endfor %}
+</table>
+</div>
+{% endfor %}
+
+
 {% endblock %} 

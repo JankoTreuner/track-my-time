@@ -22,27 +22,20 @@ def index(request):
 
 @login_required()
 def overview(request):
-    grouped_entries = TimeEntry.objects.filter(booked=False, client__isnull=False,
-                                               client__has_booking=True).values('start__date', 'client__name').annotate(
-        count=Sum(1))
+    clients = Client.objects.all()
+    entries = list()
+    for client in clients:
+        year_infos = list()
+        for year in client.years:
+            a = client.workedhours_year(year)
+            b = client.workinghours_year(year)
 
-    for entry in grouped_entries:
-        duration_total = datetime.timedelta()
-        current_date = entry['start__date']
-        entries_of_day = TimeEntry.objects.filter(booked=False, client__isnull=False, client__has_booking=True,
-                                                  start__date=current_date)
-        for entry_of_day in entries_of_day:
-            duration_total = duration_total + entry_of_day.duration
-        entry['duration'] = duration_total
-        try:
-            entry['workinghours'] = WorkDay.objects.get(client__name=entry['client__name'],
-                                                        day=current_date.weekday()).workinghours
-        except WorkDay.DoesNotExist:
-            entry['workinghours'] = datetime.timedelta(0)
-
-        entry['timediff'] = readabledelta.readabledelta(entry['duration'] - entry['workinghours'])
-
-    return render(request, 'timetracker/overview.html', {'entries': grouped_entries})
+            year_info = {'year': year, 'hours': a, 'expected': b, 'diff': readabledelta.readabledelta(a-b)}
+            year_infos.append(year_info)
+        
+        entries.append({'client': client, 'years': year_infos})
+    
+    return render(request, 'timetracker/overview.html', {'entries': entries})
 
 
 @login_required()
