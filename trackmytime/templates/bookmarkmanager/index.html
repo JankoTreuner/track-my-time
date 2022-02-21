@@ -9,5 +9,13 @@
 {% block body %}
 
   <p>Hello Bookmark</p>
-
+  <table>
+  {% for bookmark in bookmarks %}
+  <tr>
+    <td>
+        <bookmark class="url">{{bookmark.url}}</bookmark>
+    </td>
+  </tr>
+  {% endfor %}
+    </table>
 {% endblock %}
