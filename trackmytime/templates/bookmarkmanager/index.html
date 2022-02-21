@@ -13,7 +13,7 @@
   {% for bookmark in bookmarks %}
   <tr>
     <td>
-        <bookmark class="url">{{bookmark.url}}</bookmark>
+        <bookmark class="url"><a href='{{bookmark.url}}' target=_blank>{{ bookmark.url}}</a></bookmark>
     </td>
   </tr>
   {% endfor %}
