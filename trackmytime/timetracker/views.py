@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
-from django.db.models import Sum, Count
+from django.db.models import Count
 from .forms import AddEntryForm
 from django.contrib.auth.decorators import login_required
 import readabledelta
 import datetime
 
 
-from .models import Client, TimeEntry, WorkDay
+from .models import Client, TimeEntry
 
 
 @login_required()
@@ -32,9 +32,9 @@ def overview(request):
 
             year_info = {'year': year, 'hours': a, 'expected': b, 'diff': readabledelta.readabledelta(a-b)}
             year_infos.append(year_info)
-        
+
         entries.append({'client': client, 'years': year_infos})
-    
+
     return render(request, 'timetracker/overview.html', {'entries': entries})
 
 
