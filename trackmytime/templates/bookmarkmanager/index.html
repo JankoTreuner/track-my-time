@@ -1,21 +1,45 @@
 {% extends "base.html" %}
-{% load static %}
-{% load bootstrap %}
 
-{% block title %}
-  Bookmarks
-{% endblock %}
+{% load bootstrap %}
+{% load static %}
+
+
+{% block title %}Bookmark{% endblock %}
 
 {% block body %}
 
   <p>Hello Bookmark</p>
-  <table>
+  <form method='post' action="{% url 'bookmark-add' %}" class="form-inline" >
+    {% csrf_token %}
+    {{form|bootstrap}}
+    <button type="submit" class="btn btn-primary">Add Entry</button>
+    
+    </form>
+
+  <div class="container">
+  <table class="table table-striped">
+      <thead>
+    <tr>
+        <th>Link</th>
+        <th>Client</th>
+        <th>Action</th> 
+    </tr>
+</thead>
+<tbody>
   {% for bookmark in bookmarks %}
   <tr>
     <td>
-        <bookmark class="url"><a href='{{bookmark.url}}' target=_blank>{{ bookmark.url}}</a></bookmark>
+        <bookmark class="url"><a href='{{bookmark.url}}' target=_blank>{{ bookmark.url }}</a></bookmark>
+    </td>
+    <td>
+        {{ bookmark.client }}
+    </td>
+    <td>
+
     </td>
   </tr>
   {% endfor %}
+</tbody>
     </table>
+</div>
 {% endblock %}
